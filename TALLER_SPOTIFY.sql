@@ -1,0 +1,83 @@
+DROP TABLE CANCION_GENERO CASCADE CONSTRAINT;
+DROP TABLE CANCION CASCADE CONSTRAINT;
+DROP TABLE ALBUM CASCADE CONSTRAINT;
+DROP TABLE SELLO CASCADE CONSTRAINT;
+DROP TABLE GENERO CASCADE CONSTRAINT;
+DROP TABLE ARTISTA CASCADE CONSTRAINT;
+
+
+
+CREATE TABLE ARTISTA(
+    id_artista NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nombre VARCHAR2(100) NOT NULL,
+    esta_verificado CHAR(1),
+    biografia VARCHAR2(250)
+
+);
+
+CREATE TABLE GENERO(
+    id_genero NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nombre VARCHAR2(50) NOT NULL
+
+);
+
+CREATE TABLE SELLO(
+    id_sello NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
+    nombre VARCHAR2(100) NOT NULL
+);
+
+CREATE TABLE ALBUM(
+    id_album NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    titulo VARCHAR2(100) NOT NULL,
+    fecha_lanzamiento DATE,
+    id_sello NUMBER REFERENCES SELLO(id_sello)
+
+);
+
+CREATE TABLE CANCION(
+    id_cancion NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    titulo VARCHAR2(200),
+    id_artista NUMBER REFERENCES ARTISTA(id_artista),
+    id_album NUMBER REFERENCES ALBUM(id_album),
+    genero VARCHAR2(200),
+    duracion_segundos NUMBER,
+    fecha_lanzamiento DATE
+
+);
+
+
+CREATE TABLE CANCION_GENERO(
+    id_cancion NUMBER REFERENCES CANCION(id_cancion),
+    id_genero NUMBER REFERENCES GENERO(id_genero)
+);
+
+
+
+INSERT INTO ARTISTA(nombre, esta_verificado) VALUES ('Michael Jackson', 'S');
+INSERT INTO ARTISTA(nombre, esta_verificado) VALUES ('Bad Bunny', 'S');
+INSERT INTO ARTISTA(nombre, esta_verificado) VALUES ('Anuel AA', 'S');
+INSERT INTO ARTISTA(nombre, esta_verificado) VALUES ('Maluma', 'S');
+COMMIT;
+SELECT * FROM ARTISTA;
+
+INSERT INTO GENERO(nombre) VALUES('Pop');
+INSERT INTO GENERO(nombre) VALUES('Reggaeton');
+INSERT INTO GENERO(nombre) VALUES('Trap');
+INSERT INTO GENERO(nombre) VALUES('Reggaeton');
+COMMIt;
+SELECT * FROM GENERO;
+
+INSERT INTO SELLO(nombre) VALUES (' Epic Records');
+INSERT INTO SELLO(nombre) VALUES (' Rimas Entertainment');
+INSERT INTO SELLO(nombre) VALUES (' Real Hasta la Muerte, LLC');
+INSERT INTO SELLO(nombre) VALUES (' Royalty Records');
+COMMIT;
+SELECT * FROM SELLO;
+
+INSERT INTO ALBUM(titulo, fecha_lanzamiento, id_sello) VALUES ('Thriller', DATE(1982-11-30), 1);
+INSERT INTO ALBUM(titulo, fecha_lanzamiento, id_sello) VALUES ('X 100PRE', DATE(2018-07-17), 1);
+INSERT INTO ALBUM(titulo, fecha_lanzamiento, id_sello) VALUES ('Real Hasta La Muerte', DATE(2018-12-24), 1);
+
+COMMIT;
+SELECT * FROM ALBUM;
+
