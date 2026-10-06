@@ -15,13 +15,27 @@ CREATE TABLE CHAT_GRUPAL(
     fecha_creacion DATE
 );
 
+CREATE TABLE SEGUIDOR(
+    id_seguidor NUMBER REFERENCES USUARIO(id_usuario),
+    id_seguido NUMBER REFERENCES USUARIO(id_usuario),
+    estado CHAR(1),
+    fecha_seguimiento DATE
+);
+
+CREATE TABLE MIEMBROS_CHAT(
+    id_chat NUMBER REFERENCES CHAT_GRUPAL(id_chat),
+    id_usuario NUMBER REFERENCES USUARIOS(id_usuario),
+    fecha_union DATE,
+    es_admin CHAR(1)
+),
+
 CREATE TABLE PUBLICACIONES(
     id_publicacion NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     tipo_contenido CHAR(1),
     url_archivo VARCHAR2(250),
     fecha_hora DATE,
     ubicacion VARCHAR2(100),
-    pie_foto VARCHAR2(2000)
+    pie_foto VARCHAR2(2000),
     id_usuario NUMBER REFERENCES USUARIO(id_usuario)
 );
 
@@ -37,6 +51,39 @@ CREATE TABLE HISTORIAS(
     id_usuario NUMBER REFERENCES USUARIO(id_usuario)
 );
 
+CREATE TABLE INSTANTANEA(
+    id_instantanea NUMBER GENERATED ALWAYS AS IDENDITY PRIMARY KEY,
+    fecha_hora DATE,
+    privacidad CHAR(1),
+    reaccion_instantaneas VARCHAR2(10),
+    id_usuario NUMBER REFERENCES USUARIO(id_usuario)
+);
+
+CREATE TABLE VISUALIZACION_INSTANT
+
+CREATE TABLE NOTA(
+    id_nota NUMBER GENERATED ALWAYS AS IDENDITY PRIMARY KEY,
+    texto VARCHAR2(80),
+    titulo_cancion VARCHAR2(100),
+    artista_cancion VARCHAR2(100),
+    es_mejores_amigos CHAR(1),
+    fecha_creacion DATE,
+    fecha_expiracion DATE,
+    id_usuario NUMBER REFERENCES USUARIO(id_usuario)
+);
+
+CREATE TABLE COMENTARIOS(
+    id_comentario NUMBER GENERATED ALWAYS AS IDENDITY PRIMARY KEY,
+    texto VARCHAR2(250),
+    fecha_hora DATE,
+    id_usuario NUMBER REFERENCES USUARIO(id_usuario),
+
+    id_publicacion NUMBER REFERENCES PUBLICACIONES(id_publicacion),
+    id_live NUMBER REFERENCES EN_VIVO(id_live),
+    id_historia NUMBER REFERENCES HISTORIAS(id_historia),
+    id_nota NUMBER REFERENCES NOTA(id_nota)
+);
+
 CREATE TABLE EN_VIVO(
     id_live NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     url_en_vivo VARCHAR2(250),
@@ -46,6 +93,8 @@ CREATE TABLE EN_VIVO(
     estado CHAR(1),
     id_usuario NUMBER REFERENCES USUARIO(id_usuario)
 );
+
+
 
 CREATE TABLE MENSAJE(
     id_mensaje NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -57,3 +106,26 @@ CREATE TABLE MENSAJE(
     fecha_hora_envio DATE,
     estado CHAR(1)
 );
+
+CREATE TABLE REACCION(
+    id_usuario NUMBER REFERENCES USUARIO(id_usuario),
+    id_mensaje NUMBER REFERENCES MENSAJE(id_mensaje),
+    emoji VARCHAR2(10),
+    fecha_hora DATE
+);
+
+CREATE TABLE ME_GUSTA(
+    id_usuario NUMBER REFERENCES USUARIO(id_usuario),
+    id_publicacion NUMBER REFERENCES PUBLICACIONES(id_publicacion),
+    id_historia NUMBER REFERENCES HISTORIAS(id_historia),
+    id_comentario NUMBER REFERENCES COMENTARIOS(id_comentario),
+    id_nota NUMBER REFERENCES NOTA(id_nota)
+);
+
+
+COMMIT;   
+
+
+
+
+
